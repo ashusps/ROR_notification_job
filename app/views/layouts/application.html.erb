@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NotificationMaker</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div id="flash">
+    <% if notice.present? %>
+      <p class="notice" style= "background: #78a980; color: #fff;"><%= notice %></p>
+    <% end %>
+    <% if errors.present? %>
+      <p class="alert" style= "background: #f5cece; color: red;"><%= errors %></p>
+    <% end %>
+    </div>
+
+
+    <%= yield %>
+  </body>
+</html>

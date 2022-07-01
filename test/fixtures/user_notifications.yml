@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  notification: one
+  approved: false
+
+two:
+  user: two
+  notification: two
+  approved: false

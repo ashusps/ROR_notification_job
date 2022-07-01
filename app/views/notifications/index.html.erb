@@ -1,0 +1,115 @@
+<div class="container-fluid">
+	<br/>
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 row">
+		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+			<h3>Notifications 
+				<%= link_to 'Create Notifictaion', new_notification_path, class: "btn btn-primary", style: "float: right;" %> 
+				<%= button_tag type: :button, class: "btn btn-danger", id: "delete-notifications", disabled: true, style: "float: right; margin-right: 10px;" do %>
+	  				Delete 
+	  			<% end %>
+	   		</h3>
+			<br/>
+			<table class="table table-bordered">
+			    <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Title</th>
+				      <th scope="col">Importance</th>
+				      <th scope="col">Day</th>
+				      <th scope="col" colspan="2">Actions</th>
+				    </tr>
+			    </thead>
+
+			    <tbody>
+			        <% @notifications.each_with_index do |notification, index| %>
+			      		<tr>
+			      			<td><%= check_box_tag 'notification_ids[]', notification.id %> <%= index + 1 %></td>
+					        <td><%= notification.title %></td>
+					        <td><%= notification.importance %></td>
+					        <td><%= notification.day %></td>
+					        <td><%= link_to 'Show', notification %></td>
+					        <!-- <td><%#= link_to 'Delete', notification, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
+			      		</tr>
+			    	<% end %>
+			  	</tbody>
+			</table>
+
+		</div>
+
+		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+			<h3>Notifications Requests</h3>
+			<br/>
+			<table class="table table-bordered">
+			    <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Title</th>
+				      <th scope="col">Importance</th>
+				      <th scope="col">Day</th>
+				      <th scope="col">Creator</th>
+				      <th scope="col">Actions</th>
+				    </tr>
+			    </thead>
+
+			    <tbody>
+			        <% @user_notifications.each_with_index do |user_notification, index| %>
+			      		<tr>
+			      			<td><%= index + 1 %></td>
+					        <td><%= user_notification.notification.title %></td>
+					        <td><%= user_notification.notification.importance %></td>
+					        <td><%= user_notification.notification.day %></td>
+					        <td><%= user_notification.notification.user.email %></td>
+					        <td>
+					        	<%= if user_notification.approved
+					        		"Already Approved"
+						        	else
+						        		link_to 'Approve', "notifications/approved/#{user_notification.id}" 
+						        	end
+					        	%>
+					        </td>
+			      		</tr>
+			    	<% end %>
+			  	</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$("[type='checkbox']").change(function(){
+			if ($("[type='checkbox']:checked").length == 0) {
+			    $("#delete-notifications").attr("disabled", true);
+			} else {
+			    $("#delete-notifications").removeAttr("disabled");
+			}
+		});
+
+		$("#delete-notifications").click(function(){ 
+			if (confirm('Are you sure wnat to delete selected notifications')) {
+				var idsArry = [];
+				$("[type='checkbox']:checked").each(function(){
+				    idsArry.push($(this).val());
+				});
+			    $.ajax({
+			        type: "POST",
+			        url: "/notifications/bulk_destroy",
+			        dataType: "json",
+			        data: { ids: idsArry },
+			        success(data) {
+			        	$("#flash").html('<p class="notice" style= "background: #78a980; color: #fff;">' + data.message + '</p>');
+			        	$("[type='checkbox']:checked").each(function(){
+						    $(this).closest('tr').remove();
+						});
+			        	return false;
+					},
+					error(data) {	
+						$("#flash").html('<p class="alert" style= "background: #f5cece; color: red;>' + data.responseJSON.message + '</p>');				
+					    return false;
+					}
+			    });
+			}
+	    event.preventDefault();
+		});
+	});
+</script>

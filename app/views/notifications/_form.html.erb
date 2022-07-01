@@ -1,0 +1,38 @@
+<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+  <%= form_with(model: notification) do |form| %>
+    <div class="form-group">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: "form-control" %>
+    </div>
+    <br/>
+    <div class="form-group">
+      <%= form.label :content %>
+      <%= form.text_area :content, class: "form-control" %>
+    </div>
+    <br/>
+    <div class="form-group">
+      <%= form.label :user %>
+      <%= form.select(:receiver_id, options_for_select(users_list), {}, { class: 'form-control' } )
+      %>
+    </div>
+    <br/>
+    <div class="form-group">
+      <%= form.label :day %>
+       <%= form.datetime_local_field :day, class: "form-control" %>
+    </div>
+    <br/>
+    <div class="form-group">
+      <%= form.label :tag %>
+      <%= form.text_field :tag, class: "form-control" %>
+    </div>
+    <br/>
+    <div class="form-group">
+      <%= form.label :importance %>
+      <%= form.select(:importance, options_for_select( importances_list ), {}, { class: 'form-control' } ) %>
+    </div>
+    <br/>
+    <div class="actions">
+      <%= form.submit class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
