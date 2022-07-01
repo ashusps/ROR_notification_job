@@ -1,29 +1,26 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Title:</strong>
-  <%= @notification.title %>
-</p>
-
-<p>
-  <strong>Content:</strong>
-  <%= @notification.content %>
-</p>
-
-<p>
-  <strong>Day:</strong>
-  <%= @notification.day %>
-</p>
-
-<p>
-  <strong>Importance:</strong>
-  <%= @notification.importance %>
-</p>
-
-<p>
-  <strong>Tag:</strong>
-  <%= @notification.tag %>
-</p>
-
-
-<%= link_to 'Back', notifications_path %>
+<div class="container">
+  <br/>
+  <h3>Notification #<%= @notification.id%></h3>
+  <br/>
+  <p>
+    <strong>Title:</strong>
+    <%= @notification.title %>
+  </p>
+  <p>
+    <strong>Content:</strong>
+    <%= @notification.content %>
+  </p>
+  <p>
+    <strong>Day:</strong>
+    <%= @notification.day %>
+  </p>
+  <p>
+    <strong>Importance:</strong>
+    <%= @notification.importance %>
+  </p>
+  <p>
+    <strong>Tag:</strong>
+    <%= @notification.tag %>
+  </p>
+  <%= link_to 'Back', notifications_path %>
+</div>

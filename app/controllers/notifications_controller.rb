@@ -17,14 +17,18 @@ class NotificationsController < ApplicationController
   def create
     @notifications = current_user.notifications
     @notification = @notifications.find_by_tag(notification_params[:tag].downcase)
-    @notification.update!(notification_params) unless @notification.nil?
+    if @notification.nil?
+      @notification = @notifications.new(notification_params)
+      unless @notification.save
+        flash[:errors] = error_message!(@notification)
+        return render :new, status: :unprocessable_entity
+      end
+    else
+      @notification.update!(notification_params)
+    end
     @notification ||= @notifications.create!(notification_params)
-  	@notification.create_receivers!(params[:notification][:receiver_id])
-    redirect_to notifications_path, notice: "Notification was successfully created."
-
-  rescue Exception => e
-    flash[:errors] = e.message
-    render :new, status: :unprocessable_entity
+    @notification.create_receivers!(params[:notification][:receiver_id])
+    redirect_to notifications_path, notice: "Notification was successfully created."    
   end
 
   def approved

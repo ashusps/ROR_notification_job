@@ -1,10 +1,21 @@
+<style type="text/css">
+	tr:hover, input[type='checkbox'] {
+	    cursor: pointer;
+	}
+
+	button#delete-notifications {
+		float: right; 
+		margin-right: 10px;
+	}
+</style>
+
 <div class="container-fluid">
 	<br/>
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 row">
 		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 			<h3>Notifications 
 				<%= link_to 'Create Notifictaion', new_notification_path, class: "btn btn-primary", style: "float: right;" %> 
-				<%= button_tag type: :button, class: "btn btn-danger", id: "delete-notifications", disabled: true, style: "float: right; margin-right: 10px;" do %>
+				<%= button_tag type: :button, class: "btn btn-danger", id: "delete-notifications", disabled: true do %>
 	  				Delete 
 	  			<% end %>
 	   		</h3>
@@ -16,18 +27,18 @@
 				      <th scope="col">Title</th>
 				      <th scope="col">Importance</th>
 				      <th scope="col">Day</th>
-				      <th scope="col" colspan="2">Actions</th>
+				      <!-- <th scope="col" colspan="2">Actions</th> -->
 				    </tr>
 			    </thead>
 
 			    <tbody>
 			        <% @notifications.each_with_index do |notification, index| %>
-			      		<tr>
+			      		<tr onclick="window.location.href= 'notifications/<%= notification.id %>';">
 			      			<td><%= check_box_tag 'notification_ids[]', notification.id %> <%= index + 1 %></td>
 					        <td><%= notification.title %></td>
 					        <td><%= notification.importance %></td>
 					        <td><%= notification.day %></td>
-					        <td><%= link_to 'Show', notification %></td>
+					        <!-- <td><%#= link_to 'Show', notification %></td> -->
 					        <!-- <td><%#= link_to 'Delete', notification, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
 			      		</tr>
 			    	<% end %>
@@ -77,7 +88,7 @@
 
 <script type="text/javascript">
 	$(function() {
-		$("[type='checkbox']").change(function(){
+		$("[type='checkbox']").change(function(e){
 			if ($("[type='checkbox']:checked").length == 0) {
 			    $("#delete-notifications").attr("disabled", true);
 			} else {
@@ -85,7 +96,11 @@
 			}
 		});
 
-		$("#delete-notifications").click(function(){ 
+		$("[type='checkbox']").click(function(){
+			event.stopPropagation();
+		});
+
+		$("#delete-notifications").click(function(e){ 
 			if (confirm('Are you sure wnat to delete selected notifications')) {
 				var idsArry = [];
 				$("[type='checkbox']:checked").each(function(){
